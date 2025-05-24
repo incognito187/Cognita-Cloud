@@ -243,7 +243,6 @@ Would you like me to help you with:
 - A **Dialogflow chatbot script** for this use case?
 - A **sample bot response JSON structure** for backend integration?
 
-Let me know how you'd like to proceed!
 
 
 ---
@@ -463,4 +462,3 @@ Would you like me to help you with:
 - A **Dialogflow + Twilio Flex integration** for advanced use cases?
 - A **web UI dashboard for viewing orders from the Google Sheet**?
 
-Let me know what you'd like next — I'm happy to provide templates, code samples, or full walkthroughs!
