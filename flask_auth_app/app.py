@@ -1,3 +1,5 @@
+# app.py
+
 from flask import Flask, render_template, redirect, url_for, request, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
@@ -6,8 +8,12 @@ from datetime import timedelta
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key'
+
+# PostgreSQL DB URI (update this for your environment)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://flaskuser:flaskpass@localhost/flaskauthdb'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Session Timeout (e.g., 5 minutes)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=5)
 
 db = SQLAlchemy(app)
@@ -27,7 +33,7 @@ def load_user(user_id):
 
 @app.before_request
 def before_request():
-    session.permanent = True
+    session.permanent = True  # Make session last across browser restarts
     app.permanent_session_lifetime = app.config['PERMANENT_SESSION_LIFETIME']
 
 @app.route('/')
