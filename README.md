@@ -416,3 +416,113 @@ Would you like me to:
 - Provide a Dockerfile for easy deployment?
 
 Let me know how you'd like to proceed!
+
+To log into PostgreSQL using the connection string:
+
+```
+postgresql://flaskuser:**********@localhost/flaskauthdb
+```
+
+you can use the `psql` command-line tool or a GUI tool. Below are **multiple ways** to connect using this URL-style connection string.
+
+---
+
+## ✅ Option 1: Use `psql` with a Connection String (Terminal)
+
+PostgreSQL supports connecting via a full **libpq connection string**, which is what you've provided.
+
+### 🔧 Command:
+
+```bash
+psql "postgresql://flaskuser:**********@localhost/flaskauthdb"
+```
+
+Just paste that into your terminal, and it will connect you directly to the database.
+
+> ✅ This works in macOS, Linux, and modern Windows terminals with PostgreSQL installed.
+
+---
+
+## ✅ Option 2: Use Individual Flags with `psql`
+
+If you prefer not to use the full URL format, you can break it down like this:
+
+```bash
+psql -h localhost -U flaskuser -d flaskauthdb
+```
+
+You’ll be prompted for the password (`**********`) unless you set up `.pgpass` (see below).
+
+---
+
+## ✅ Option 3: Set Up `.pgpass` File for Passwordless Login
+
+To avoid entering the password every time in the terminal:
+
+### 1. Create or edit the `.pgpass` file:
+
+```bash
+nano ~/.pgpass
+```
+
+### 2. Add this line:
+
+```
+localhost:5432:flaskauthdb:flaskuser:**********
+```
+
+### 3. Save and exit (`Ctrl+O`, `Enter`, `Ctrl+X` in nano)
+
+### 4. Set correct permissions:
+
+```bash
+chmod 600 ~/.pgpass
+```
+
+Now you can connect without being prompted for a password:
+
+```bash
+psql -h localhost -U flaskuser -d flaskauthdb
+```
+
+---
+
+## ✅ Option 4: Use a GUI Tool (e.g., Postico, DBeaver, TablePlus)
+
+Most PostgreSQL GUIs allow you to paste the connection string or enter its components manually.
+
+### Example (in Postico or TablePlus):
+
+- **Host:** `localhost`
+- **Port:** `5432`
+- **User:** `flaskuser`
+- **Password:** `**********`
+- **Database:** `flaskauthdb`
+
+Then click **Connect**.
+
+---
+
+## 🧪 Bonus: Test if the DB Exists
+
+Once connected, try:
+
+```sql
+SELECT current_user;
+SELECT current_database();
+\dt
+```
+
+This confirms you're logged in correctly and shows any tables in the database.
+
+---
+
+## ❓ Troubleshooting Common Issues
+
+| Problem | Solution |
+|--------|----------|
+| `FATAL: password authentication failed` | Check username/password or update `.pg_hba.conf` |
+| `FATAL: database ... does not exist` | Create the DB first: `CREATE DATABASE flaskauthdb OWNER flaskuser;` |
+| `could not connect to server` | Make sure PostgreSQL is running: `brew services start postgresql` |
+
+---
