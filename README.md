@@ -11,10 +11,7 @@
 ✅ Flash messages  
 ✅ Profile settings  
 ✅ Auto-generated folder structure  
-✅ Downloadable ZIP  
-
-You **don’t** want OAuth integration (Google/Facebook), so we’ll skip that.
-
+✅ Downloadable ZIP
 ---
 
 ## 📦 Final Project Structure
@@ -33,9 +30,6 @@ flask_auth_app/
     ├── register.html
     └── admin.html
 ```
-
-I’ll now give you a **Python script** to auto-generate this project structure, and then I’ll provide the full downloadable ZIP-like content below.
-
 ---
 
 ## 🧪 Step 1: Python Script to Generate Folder Structure
