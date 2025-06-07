@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<h2>{{ title }} Services</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Service Name</th>
+            <th>Status Page</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for name, url in services %}
+        <tr>
+            <td>{{ name }}</td>
+            <td><a href="{{ url }}" target="_blank">View Status</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

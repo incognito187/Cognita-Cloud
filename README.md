@@ -525,4 +525,7 @@ This confirms you're logged in correctly and shows any tables in the database.
 | `FATAL: database ... does not exist` | Create the DB first: `CREATE DATABASE flaskauthdb OWNER flaskuser;` |
 | `could not connect to server` | Make sure PostgreSQL is running: `brew services start postgresql` |
 
+flask run --port=8000
 ---
+
+

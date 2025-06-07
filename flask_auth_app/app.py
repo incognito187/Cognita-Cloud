@@ -78,12 +78,13 @@ def login():
             return redirect(url_for('login'))
     return render_template('login.html')
 
-@app.route('/logout')
+@app.route('/logout', methods=['POST'])
 @login_required
 def logout():
     logout_user()
     session.clear()
     return redirect(url_for('login'))
+
 
 @app.route('/home')
 @login_required
@@ -118,3 +119,58 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True)
+
+# Sample data: group external URLs by category
+CLOUD_SERVICES = {
+    "SaaS": [
+        ("1Password", "https://status.1Password.com"),
+        ("Asana", "https://status.Asana.com"),
+        ("ClickUp", "https://status.ClickUp.com"),
+        ("Dropbox", "https://status.Dropbox.com"),
+        ("Google Workspace", "https://status.Google  Workspace.com"),
+        ("Microsoft 365", "https://status.Microsoft  365.com"),
+        ("Slack", "https://status.Slack.com"),
+        ("Zoom", "https://status.Zoom.com"),
+        ("HubSpot", "https://status.HubSpot.com"),
+        ("Notion", "https://status.Notion.com")
+    ],
+    "PaaS": [
+        ("Heroku", "https://status.heroku.com"),
+        ("Google Cloud Platform", "https://status.Google  Cloud Platform.com"),
+        ("Azure", "https://status.Microsoft  Azure.com"),
+        ("Render", "https://status.Render.com"),
+        ("Railway", "https://status.Railway.com"),
+        ("Vercel", "https://status.Vercel.com"),
+        ("Netlify", "https://status.Netlify.com"),
+        ("Firebase", "https://status.Firebase.com"),
+        ("AWS Lambda", "https://status.Amazon  Web Services.com"),
+        ("Cloudflare Workers", "https://status.Cloudflare.com")
+    ],
+    "IaaS": [
+        ("Amazon EC2", "https://status.Amazon  Web Services.com"),
+        ("DigitalOcean", "https://status.Digital  Ocean.com"),
+        ("Linode", "https://status.Linode.com"),
+        ("Oracle Cloud", "https://status.Oracle  Cloud.com"),
+        ("OVHcloud", "https://status.OVHcloud  Public Cloud.com"),
+        ("Google Compute Engine", "https://status.Google  Cloud Platform.com"),
+        ("Microsoft Azure VMs", "https://status.Microsoft  Azure.com"),
+        ("Rackspace", "https://status.Rackspace  Cloud.com"),
+        ("Alibaba Cloud", "https://status.alibabacloud.com"),
+        ("IBM Cloud", "https://status.IBM  Cloud.com")
+    ]
+}
+
+@app.route('/saas')
+@login_required
+def saas():
+    return render_template('cloud_service.html', title="SaaS", services=CLOUD_SERVICES["SaaS"])
+
+@app.route('/paas')
+@login_required
+def paas():
+    return render_template('cloud_service.html', title="PaaS", services=CLOUD_SERVICES["PaaS"])
+
+@app.route('/iaas')
+@login_required
+def iaas():
+    return render_template('cloud_service.html', title="IaaS", services=CLOUD_SERVICES["IaaS"])
