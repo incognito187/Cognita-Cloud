@@ -312,7 +312,6 @@ template_admin = '''{% extends "base.html" %}
 </table>
 {% endblock %}
 '''
-
 with open(os.path.join(project_name, "templates", "admin.html"), "w") as f:
     f.write(template_admin)
 
