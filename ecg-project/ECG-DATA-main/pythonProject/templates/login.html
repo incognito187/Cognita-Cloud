@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="login-container">
+    <h2>Log in to Ghana Power Outage Service Status Dashboard</h2>
+
+    <p class="login-description">
+        Welcome to the Ghana Power Outage Service Status Dashboard.
+        Stay updated with real-time power outages and set up personalized alerts.
+        Designed for your businees needs, and your timely alert !!
+    </p>
+
+    <form method="POST">
+        {{ form.csrf_token }}
+        <div class="form-group">
+            {{ form.username.label }} {{ form.username }}
+        </div>
+        <div class="form-group">
+            {{ form.password.label }} {{ form.password }}
+        </div>
+        <div class="form-actions">
+            {{ form.submit }}
+        </div>
+    </form>
+
+    <p class="help-text">
+        <strong>New user?</strong> Contact your administrator to register.
+    </p>
+</div>
+{% endblock %}
