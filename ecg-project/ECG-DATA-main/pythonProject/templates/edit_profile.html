@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Edit Alert Preferences</h2>
+
+<form method="POST">
+    {% for alert in alerts %}
+        <div style="margin-bottom: 10px;">
+            <strong>{{ alert.town }}</strong><br>
+            <label><input type="checkbox" name="whatsapp_{{ alert.id }}" {% if alert.whatsapp %}checked{% endif %}> WhatsApp</label><br>
+            <label><input type="checkbox" name="sms_{{ alert.id }}" {% if alert.sms %}checked{% endif %}> SMS</label><br>
+            <label><input type="checkbox" name="email_{{ alert.id }}" {% if alert.email %}checked{% endif %}> Email</label><br>
+            <label><input type="checkbox" name="slack_{{ alert.id }}" {% if alert.slack %}checked{% endif %}> Slack</label><br>
+            <hr>
+        </div>
+    {% endfor %}
+    <button type="submit">Save Changes</button>
+</form>
+
+<a href="{{ url_for('profile') }}">Back to Profile</a>
+{% endblock %}
