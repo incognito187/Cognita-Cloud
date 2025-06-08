@@ -4,6 +4,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Length, EqualTo
 import os
+from datetime import datetime  # <-- Added missing import
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key_here'
@@ -39,7 +40,7 @@ def format_outage_date(date_str):
     except Exception:
         return "Unknown Date"
 
-# Models
+# ===== MODELS =====
 class User(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
@@ -53,7 +54,13 @@ class TownAlert(db.Model):
     town = db.Column(db.String(100), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
-# Forms
+    # Alert Preferences
+    whatsapp = db.Column(db.Boolean, default=False)
+    sms = db.Column(db.Boolean, default=False)
+    email = db.Column(db.Boolean, default=False)
+    slack = db.Column(db.Boolean, default=False)
+
+# ===== FORMS =====
 class RegisterForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=4, max=20)])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
@@ -65,7 +72,7 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
 
-# Helper function for default power status
+# ===== UTILITY FUNCTIONS =====
 def get_status(town):
     return ECG_STATUS.get(town, "Power")
 
@@ -73,7 +80,7 @@ def get_status(town):
 def utility_processor():
     return dict(get_status=get_status, format_outage_date=format_outage_date, OUTAGE_DATES=OUTAGE_DATES)
 
-# Routes
+# ===== ROUTES =====
 @app.route('/')
 def index():
     if 'username' in session:
@@ -163,6 +170,36 @@ def update_alerts():
     db.session.commit()
     return redirect(url_for('dashboard', region=request.form.get('region')))
 
+@app.route('/profile')
+def profile():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    user = User.query.filter_by(username=session['username']).first()
+    alerts = TownAlert.query.filter_by(user_id=user.id).all()
+
+    return render_template('profile.html', user=user, alerts=alerts)
+
+@app.route('/edit_profile', methods=['GET', 'POST'])
+def edit_profile():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    user = User.query.filter_by(username=session['username']).first()
+    alerts = TownAlert.query.filter_by(user_id=user.id).all()
+
+    if request.method == 'POST':
+        for alert in alerts:
+            alert.whatsapp = bool(request.form.get(f'whatsapp_{alert.id}'))
+            alert.sms = bool(request.form.get(f'sms_{alert.id}'))
+            alert.email = bool(request.form.get(f'email_{alert.id}'))
+            alert.slack = bool(request.form.get(f'slack_{alert.id}'))
+        db.session.commit()
+        return redirect(url_for('profile'))
+
+    return render_template('edit_profile.html', alerts=alerts)
+
+# ===== START APP =====
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
